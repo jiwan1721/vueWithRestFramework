@@ -1,17 +1,16 @@
 <template>
 <div id="app">
- <Print-Values :greeting="hello"></Print-Values>
+  <TasksVue></TasksVue>
 </div>
 </template>
 
 <script>
-import PrintValues from './components/PrintValues'
-
+import TasksVue from './components/TasksVue.vue'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    PrintValues
+    TasksVue,
 },
 
 }
