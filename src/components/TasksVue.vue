@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="add_task">
-    <form v-on:submit.prevent="submitForm() ">
+    <form v-on:submit.prevent="submitForm()">
         <div class="form-group">
             <label for="title">Title</label>
             <input type="text" class="form-control" id="title" v-model="title">
@@ -31,7 +31,7 @@
 </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
     export default {
         
@@ -45,10 +45,7 @@ import axios from 'axios';
         
         methods: {
            
-            created() {
-            // Fetch tasks on page load
-                this.getData();
-            },
+
             async getData() {
                 try {
                     // fetch tasks
@@ -59,6 +56,10 @@ import axios from 'axios';
                     // log the error
                     console.log(error);
                 }
+            },
+            created() {
+            // Fetch tasks on page load
+                this.getData();
             },
             async submitForm(){
                     try {
