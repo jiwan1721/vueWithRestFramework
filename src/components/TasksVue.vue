@@ -1,65 +1,66 @@
+
 <template>
-    <div class="tasks_container">
-        <div class="tasks_content">
-            <h1>Tasks</h1>
-            <ul class="tasks_list">
-                <li v-for="task in tasks" :key="task.id">
-                    <h2>{{ task.title }}</h2>
-                    <p>{{ task.description }}</p>
-                    <button @click="toggleTask(task)">
-                        {{ task.completed ? 'Undo' : 'Complete' }}
-                    </button>
-                    <button @click="deleteTask(task)">Delete</button>
-                </li>
-            </ul>
-        </div>
+  <div class="tasks_container">
+    <div class="tasks_content">
+      <h1>Tasks</h1>
+      <ul class="tasks_list">
+        <li v-for="task in tasks" :key="task.id">
+          <!-- <h2>{{ task[0][0] }}</h2> -->
+          <p>{{ task.description }}</p>
+          
+          <button @click="toggleTask(task)">
+            {{ task.completed ? "Undo" : "Complete" }}
+          </button>
+          <button @click="deleteTask(task)">Delete</button>
+        </li>
+      </ul>
     </div>
+
     <div class="add_task">
-    <form v-on:submit.prevent="submitForm()">
+      <form v-on:submit.prevent="submitForm">
         <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" v-model="title">
+          <label for="title">Title</label>
+          <input type="text" class="form-control" id="title" v-model="title" />
         </div>
         <div class="form-group">
-            <label for="description">Description</label>
-            <textarea class="form-control" id="description" v-model="description"></textarea>
+          <label for="description">Description</label>
+          <textarea
+            class="form-control"
+            id="description"
+            v-model="description"
+          ></textarea>
         </div>
         <div class="form-group">
-            <button type="submit">Add Task</button>
+          <button type="submit">Add Task</button>
         </div>
-    </form>
-</div>
+      </form>
+    </div>
+  </div>
 </template>
 <script>
 import axios from 'axios'
 
-    export default {
-        
+
+    export default {      
         data(){
             return {
             tasks: [],
             title: '',
-            description: ''
-            }
+            description: '',
+            };
         },
-        
         methods: {
-           
-
             async getData() {
                 try {
                     // fetch tasks
                     const response = await axios.get('http://127.0.0.1:8000/api/tasks/');
                     // set the data returned as tasks
-                    this.tasks = response.data; 
+                    this.tasks = response.data;
+                    console.log(this.tasks);
                 } catch (error) {
                     // log the error
                     console.log(error);
                 }
-            },
-            created() {
-            // Fetch tasks on page load
-                this.getData();
             },
             async submitForm(){
                     try {
@@ -78,13 +79,12 @@ import axios from 'axios'
                         // Log the error
                         console.log(error);
                     }
-                }
-            },
+                },           
             async toggleTask(task){
                 try{
 
                     // Send a request to API to update the task
-                    const response = await this.$http.put(`http://127.0.0.1:8000/api/tasks/${task.id}/`, {
+                    const response = await axios.put(`http://127.0.0.1:8000/api/tasks/${task.id}/`, {
                         completed: !task.completed,
                         title: task.title,
                         description: task.description
@@ -109,25 +109,36 @@ import axios from 'axios'
                 }
             },
             async deleteTask(task){
-
+                axios.delete(`http://127.0.0.1:8000/api/tasks/${task.id}`)
+                    .then(response => {
+                        console.log(response);
+                    });
+      
                 // Confirm if one wants to delete the task
-                let confirmation = confirm("Do you want to delete this task?"); 
+                // let confirmation = confirm("Do you want to delete this task?");
+                // console.log(confirmation);
 
-                if(confirmation){
-                    try{
+                // if(confirmation){
+                //     try{
 
-                    // Send a request to delete the task
-                    await this.$http.delete(`http://127.0.0.1:8000/api/tasks/${task.id}`);
+                //     // Send a request to delete the task
+                //     await axios.delete(`http://127.0.0.1:8000/api/tasks/${task.id}`);
 
-                    // Refresh the tasks
-                    this.getData();
-                    }catch(error){
+                //     // Refresh the tasks
+                //     this.getData();
+                //     }catch(error){
 
-                    // Log any error
+                //     // Log any error
 
-                    console.log(error)
-                    }
-                }      
-            }
+                //     console.log(error)
+                //     }
+                // }
+            },
+        },
+        created(){
+            this.getData();
         }
+    };     
+            
+        
 </script>

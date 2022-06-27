@@ -4,4 +4,3 @@ import axios from 'axios'
 import Vue from 'vue';
 createApp(App).mount('#app')
 Vue.prototype.$http = axios;
-// Vuecompon.prototype.$http = axios;
